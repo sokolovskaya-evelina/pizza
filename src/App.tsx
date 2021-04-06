@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import './scss/app.scss'
-import Header from "./components/Header";
+import {Header, Categories} from "./components";
 
 const App = () => {
   return (
@@ -10,16 +10,13 @@ const App = () => {
         <div className="content">
           <div className="container">
             <div className="content__top">
-              <div className="categories">
-                <ul>
-                  <li className="active">Все</li>
-                  <li>Мясные</li>
-                  <li>Вегетарианская</li>
-                  <li>Гриль</li>
-                  <li>Острые</li>
-                  <li>Закрытые</li>
-                </ul>
-              </div>
+              <Categories items={[
+                  'Мясные',
+                  'Вегетарианская',
+                  'Гриль',
+                  'Острые',
+                  'Закрытые'
+              ]} onClickItem={(item: string)=>{console.log(item)}}/>
               <div className="sort">
                 <div className="sort__label">
                   <svg
