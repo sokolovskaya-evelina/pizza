@@ -1,10 +1,11 @@
 import React from 'react';
 import {Categories, PizzasBlock, SortPopup} from "../components";
+import {pizzasType, } from "../App";
 
 type PropsType={
-    item: Array<string>
+    items: Array<pizzasType>
 }
-const Home = () => {
+const Home: React.FC<PropsType> = ({items}) => {
     return (
         <div className="container">
             <div className="content__top">
@@ -19,7 +20,7 @@ const Home = () => {
             </div>
             <h2 className="content__title">Все пиццы</h2>
             <div className="content__items">
-                <PizzasBlock/>
+                {items.map(item=><PizzasBlock key={item.id} {...item}/>)}
             </div>
         </div>
     );
