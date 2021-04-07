@@ -2,11 +2,10 @@ import React, {useState} from 'react';
 
 type PropsType = {
     items: Array<string>
-    onClickItem: (item: string) => void
 }
 
 
-const Categories: React.FC<PropsType> = ({items, onClickItem}) => {
+const Categories: React.FC<PropsType> = ({items}) => {
     const [activeItem, setActiveItem] = useState<number | null>(null)
 
     const onSelectItem = (index: number | null) => {
