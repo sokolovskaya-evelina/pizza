@@ -7,7 +7,7 @@ type itemsType = {
 type PropsType = {
     items: Array<itemsType>
 }
-const SortPopup: React.FC<PropsType> = ({items}) => {
+const SortPopup: React.FC<PropsType> = React.memo(({items}) => {
     const [visiblePopup, setVisiblePopup] = useState<boolean>(false)
     const [activeItem, setActiveItem] = useState<number>(0)
     const sortRef = useRef(null)
@@ -58,6 +58,6 @@ const SortPopup: React.FC<PropsType> = ({items}) => {
             </div>}
         </div>
     );
-};
+});
 
 export default SortPopup;

@@ -2,14 +2,16 @@ import React, {useState} from 'react';
 
 type PropsType = {
     items: Array<string>
+    onClickItem: (index: null | number) => void
 }
 
 
-const Categories: React.FC<PropsType> = ({items}) => {
+const Categories: React.FC<PropsType> = React.memo(({items, onClickItem}) => {
     const [activeItem, setActiveItem] = useState<number | null>(null)
 
     const onSelectItem = (index: number | null) => {
         setActiveItem(index)
+        onClickItem(index)
     }
 
     return (
@@ -30,6 +32,6 @@ const Categories: React.FC<PropsType> = ({items}) => {
             </ul>
         </div>
     );
-};
+})
 
 export default Categories;
