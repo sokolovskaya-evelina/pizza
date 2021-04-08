@@ -1,13 +1,17 @@
 import React, {useEffect, useRef, useState} from 'react';
 
+type itemsType = {
+    name: string
+    type: string
+}
 type PropsType = {
-    items: Array<string>
+    items: Array<itemsType>
 }
 const SortPopup: React.FC<PropsType> = ({items}) => {
     const [visiblePopup, setVisiblePopup] = useState<boolean>(false)
     const [activeItem, setActiveItem] = useState<number>(0)
     const sortRef = useRef(null)
-    const activeLabel = items[activeItem]
+    const activeLabel = items[activeItem].name
 
     const toggleVisiblePopup = () => setVisiblePopup(!visiblePopup)
     const onSelectItem = (index: number) => {
@@ -22,7 +26,6 @@ const SortPopup: React.FC<PropsType> = ({items}) => {
 
     useEffect(() => {
         document.body.addEventListener('click', handleOutsideClick)
-        console.log(sortRef)
     }, [])
     return (
         <div ref={sortRef} className="sort">
@@ -47,9 +50,9 @@ const SortPopup: React.FC<PropsType> = ({items}) => {
                 <ul>
                     {items && items.map((item, index) =>
                         <li className={index === activeItem ? 'active' : ''}
-                            key={`${item}_${index}`}
+                            key={`${item.type}_${index}`}
                             onClick={() => onSelectItem(index)}>
-                            {item}
+                            {item.name}
                         </li>)}
                 </ul>
             </div>}
