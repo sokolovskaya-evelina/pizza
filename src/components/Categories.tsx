@@ -1,32 +1,27 @@
-import React, {useState} from 'react';
+import React from 'react';
 
 type PropsType = {
     items: Array<string>
-    onClickItem: (index: null | number) => void
+    onClickCategory: (index: null | number) => void
+    activeCategory: number | null
+
 }
 
-
-const Categories: React.FC<PropsType> = React.memo(({items, onClickItem}) => {
-    const [activeItem, setActiveItem] = useState<number | null>(null)
-
-    const onSelectItem = (index: number | null) => {
-        setActiveItem(index)
-        onClickItem(index)
-    }
-
+const Categories: React.FC<PropsType> = React.memo(({items, onClickCategory, activeCategory}) => {
     return (
         <div className="categories">
             <ul>
-                <li className={activeItem === null ? 'active' : ''}
+                <li className={activeCategory === null ? 'active' : ''}
                     onClick={() => {
-                        onSelectItem(null)
+                        onClickCategory(null)
                     }}>
                     Все
                 </li>
-                {items && items.map((item, index) =>
-                    <li className={index === activeItem ? 'active' : ''}
+                {items &&
+                items.map((item, index) =>
+                    <li className={index === activeCategory ? 'active' : ''}
                         key={`${item}_${index}`}
-                        onClick={() => onSelectItem(index)}>
+                        onClick={() => onClickCategory(index)}>
                         {item}
                     </li>)}
             </ul>

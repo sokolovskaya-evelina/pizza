@@ -1,24 +1,32 @@
 import React, {useEffect, useRef, useState} from 'react';
 
-type itemsType = {
+export type itemsType = {
     name: string
     type: string
+    order: 'desk' | 'ask'
+}
+export type sortType = {
+    type: string
+    order: string
 }
 type PropsType = {
     items: Array<itemsType>
+    activeSortType: string
+    onClickSortType: (obj:sortType)=>void
 }
-const SortPopup: React.FC<PropsType> = React.memo(({items}) => {
+const SortPopup: React.FC<PropsType> = React.memo(({items, onClickSortType, activeSortType}) => {
     const [visiblePopup, setVisiblePopup] = useState<boolean>(false)
-    const [activeItem, setActiveItem] = useState<number>(0)
     const sortRef = useRef(null)
-    const activeLabel = items[activeItem].name
+    let activeLabel: string = items.find(obj => obj.type === activeSortType)!.name
 
     const toggleVisiblePopup = () => setVisiblePopup(!visiblePopup)
-    const onSelectItem = (index: number) => {
-        setActiveItem(index)
+    const onSelectItem = (obj: {type: string, order: string}) => {
+        if(onClickSortType){
+            onClickSortType(obj)
+        }
         setVisiblePopup(false)
     }
-    const handleOutsideClick = (e: any) => {
+    const handleOutsideClick = (e:  MouseEvent | any) => {
         if (!e.path.includes(sortRef.current)) {
             setVisiblePopup(false)
         }
@@ -49,9 +57,9 @@ const SortPopup: React.FC<PropsType> = React.memo(({items}) => {
             {visiblePopup && <div className="sort__popup">
                 <ul>
                     {items && items.map((item, index) =>
-                        <li className={index === activeItem ? 'active' : ''}
+                        <li className={activeSortType === item.type ? 'active' : ''}
                             key={`${item.type}_${index}`}
-                            onClick={() => onSelectItem(index)}>
+                            onClick={() => onSelectItem(item)}>
                             {item.name}
                         </li>)}
                 </ul>

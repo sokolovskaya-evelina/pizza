@@ -1,37 +1,59 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {Categories, PizzasBlock, SortPopup} from "../components";
 import {pizzasType,} from "../App";
 import {useDispatch, useSelector} from "react-redux";
 import {reduxStoreType} from "../redux/srore";
-import {setCategory} from "../redux/actions/filters";
+import PizzaLoader from "../components/PizzaBlock/PizzaLoader";
+import {fetchPizzas} from "../redux/reducers/pizzas";
+import {setCategory, setSortBy} from "../redux/reducers/filters";
+import {itemsType} from "../components/SortPopup";
 
-const categoryNames=['Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые']
-const sortItems = [
-    {name: 'популярности', type: 'popular'},
-    {name: 'цене', type: 'price'},
-    {name: 'алфавиту', type: 'alphabet'}]
+const categoryNames = ['Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые']
+const sortItems: Array<itemsType> = [
+    {name: 'популярности', type: 'popular', order: 'desk'},
+    {name: 'цене', type: 'price', order: 'desk'},
+    {name: 'алфавиту', type: 'name', order: 'ask'}
+]
 
 const Home = React.memo(() => {
-    const dispatch = useDispatch()
-    const pizzas = useSelector<reduxStoreType, Array<pizzasType>>(state => {
-        return state.pizzas.items
-    })
 
-    const changeCategory = useCallback((index: number | null) => {
+    const dispatch = useDispatch()
+    const pizzas = useSelector<reduxStoreType, Array<pizzasType>>(state => state.pizzas.items)
+    const isLoaded = useSelector<reduxStoreType, boolean>(state => state.pizzas.isLoaded)
+    const {category, sortBy} =
+        useSelector<reduxStoreType, { category: number | null, sortBy: {type: string, order: string} }>(({filters}) => filters);
+
+
+    useEffect(() => {
+        dispatch(fetchPizzas(sortBy, category))
+    }, [dispatch, category, sortBy])
+
+    const onSelectCategory = useCallback((index: number | null) => {
         dispatch(setCategory(index))
+    }, [dispatch])
+    const onSelectSortType = useCallback((obj: {type: string, order: string}) => {
+        dispatch(setSortBy(obj))
     }, [dispatch])
     return (
         <div className="container">
             <div className="content__top">
                 <Categories items={categoryNames}
-                            onClickItem={changeCategory}
+                            onClickCategory={onSelectCategory}
+                            activeCategory={category}
                 />
-                <SortPopup items={sortItems}
+                <SortPopup activeSortType={sortBy.type}
+                           items={sortItems}
+                           onClickSortType={onSelectSortType}
                 />
             </div>
             <h2 className="content__title">Все пиццы</h2>
             <div className="content__items">
-                {pizzas.map(item => <PizzasBlock key={item.id} {...item}/>)}
+                {isLoaded
+                    ? pizzas.map(item => <PizzasBlock key={item.id} {...item}/>)
+                    : Array(12)
+                        .fill(0)
+                        .map((_, index) => <PizzaLoader key={index}/>)
+                }
             </div>
         </div>
     );

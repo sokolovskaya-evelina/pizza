@@ -1,12 +1,9 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import './App.css';
 import './scss/app.scss'
 import {Header} from "./components";
 import {Cart, Home} from "./pages";
 import {Route} from 'react-router-dom'
-import axios from "axios";
-import {useDispatch} from "react-redux";
-import {setPizzas} from "./redux/actions/pizzas";
 
 export type pizzasType = {
     id: number
@@ -20,13 +17,6 @@ export type pizzasType = {
 }
 
 const App = () => {
-    const dispatch = useDispatch()
-
-    useEffect(() => {
-        axios.get<Array<pizzasType>>(('http://localhost:3001/pizzas'))
-            .then(res => dispatch(setPizzas(res.data)))
-    }, [dispatch])
-
     return (
         <div className="wrapper">
             <Header/>

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {pizzasType} from "../App";
+import {pizzasType} from "../../App";
 import classNames from "classnames";
 
 const PizzasBlock: React.FC<pizzasType> = ({name, imageUrl, price, types, sizes}) => {
@@ -8,7 +8,6 @@ const PizzasBlock: React.FC<pizzasType> = ({name, imageUrl, price, types, sizes}
 
     const availableTypes = ['тонкое', 'традиционное']
     const availableSizes = [26, 30, 40]
-
 
     const onSelectType = (index: number) => {
         setActiveType(index)
