@@ -26,8 +26,9 @@ const SortPopup: React.FC<PropsType> = React.memo(({items, onClickSortType, acti
         }
         setVisiblePopup(false)
     }
-    const handleOutsideClick = (e:  MouseEvent | any) => {
-        if (!e.path.includes(sortRef.current)) {
+    const handleOutsideClick = (e:   any) => {
+        const path = e.path || (e.composedPath && e.composedPath())
+        if (!path.includes(sortRef.current)) {
             setVisiblePopup(false)
         }
     }
@@ -35,6 +36,7 @@ const SortPopup: React.FC<PropsType> = React.memo(({items, onClickSortType, acti
     useEffect(() => {
         document.body.addEventListener('click', handleOutsideClick)
     }, [])
+
     return (
         <div ref={sortRef} className="sort">
             <div className="sort__label">

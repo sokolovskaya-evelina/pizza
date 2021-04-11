@@ -9,7 +9,7 @@ type PropsType = {
 
 const Button: React.FC<PropsType> = ({className, outline, children, onClick}) => {
     return (
-        <button className={classNames('button', className,
+        <button onClick={onClick} className={classNames('button', className,
             {
                 'button--outline': outline
             }
