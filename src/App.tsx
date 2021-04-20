@@ -16,7 +16,7 @@ export type pizzasType = {
     rating: number
 }
 
-const App = () => {
+const App = React.memo(() => {
     return (
         <div className="wrapper">
             <Header/>
@@ -25,7 +25,7 @@ const App = () => {
                 <Route exact path='/cart' component={Cart}/>
             </div>
         </div>
-    );
-}
+    )
+})
 
 export default App;

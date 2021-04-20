@@ -7,7 +7,7 @@ type PropsType = {
     onClick?: () => void
 }
 
-const Button: React.FC<PropsType> = ({className, outline, children, onClick}) => {
+const Button: React.FC<PropsType> = React.memo( ({className, outline, children, onClick}) => {
     return (
         <button onClick={onClick} className={classNames('button', className,
             {
@@ -17,6 +17,6 @@ const Button: React.FC<PropsType> = ({className, outline, children, onClick}) =>
             {children}
         </button>
     );
-};
+})
 
 export default Button;

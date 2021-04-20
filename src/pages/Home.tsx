@@ -10,6 +10,14 @@ import {itemsType} from "../components/SortPopup";
 import {pizzaCartType} from "../components/PizzaBlock/PizzasBlock";
 import {addPizzaToCart} from "../redux/reducers/cart";
 
+type HomeStoreType = {
+    category: number | null
+    sortBy: {
+        type: string
+        order: string
+    }
+}
+
 const categoryNames = ['Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые']
 const sortItems: Array<itemsType> = [
     {name: 'популярности', type: 'popular', order: 'desk'},
@@ -18,14 +26,12 @@ const sortItems: Array<itemsType> = [
 ]
 
 const Home = React.memo(() => {
-
     const dispatch = useDispatch()
     const pizzas = useSelector<reduxStoreType, Array<pizzasType>>(state => state.pizzas.items)
     const isLoaded = useSelector<reduxStoreType, boolean>(state => state.pizzas.isLoaded)
     const cartItems = useSelector<reduxStoreType, any>(state => state.cart.items)
     const {category, sortBy} =
-        useSelector<reduxStoreType, { category: number | null, sortBy: {type: string, order: string} }>(({filters}) => filters);
-
+        useSelector<reduxStoreType, HomeStoreType>(({filters}) => filters)
 
     useEffect(() => {
         dispatch(fetchPizzas(sortBy, category))
@@ -34,12 +40,13 @@ const Home = React.memo(() => {
     const onSelectCategory = useCallback((index: number | null) => {
         dispatch(setCategory(index))
     }, [dispatch])
-    const onSelectSortType = useCallback((obj: {type: string, order: string}) => {
+    const onSelectSortType = useCallback((obj: { type: string, order: string }) => {
         dispatch(setSortBy(obj))
     }, [dispatch])
-    const handleAddPizzaToCart =useCallback( (pizzaObj: pizzaCartType) => {
+    const handleAddPizzaToCart = useCallback((pizzaObj: pizzaCartType) => {
         dispatch(addPizzaToCart(pizzaObj))
     }, [dispatch])
+
     return (
         <div className="container">
             <div className="content__top">
@@ -58,7 +65,7 @@ const Home = React.memo(() => {
                     ? pizzas.map(item => <PizzasBlock key={item.id}
                                                       {...item}
                                                       onClickAddPizza={handleAddPizzaToCart}
-                                                      addedCount={cartItems[item.id] && cartItems[item.id].length}
+                                                      addedCount={cartItems[item.id] && cartItems[item.id].items.length}
                     />)
                     : Array(12)
                         .fill(0)

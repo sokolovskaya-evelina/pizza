@@ -13,8 +13,8 @@ type CartSelector = {
     };
 };
 
-const Header = () => {
-    const {totalPrice, totalCount}: any = useSelector(
+const Header = React.memo(() => {
+    const {totalPrice, totalCount} = useSelector(
         (state: CartSelector) => ({
             totalPrice: state.cart.totalPrice,
             totalCount: state.cart.totalCount,
@@ -75,6 +75,6 @@ const Header = () => {
             </div>
         </div>
     );
-};
+})
 
 export default Header;
